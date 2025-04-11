@@ -14,7 +14,8 @@ class PokemonTableViewCell: UITableViewCell {
     static let identifier = "PokemonTableViewCell"
     static let imageBaseURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
     
-    private var currentImageURL: URL?
+    
+    // MARK: - Subviews
     
     private lazy var pokemonImageView: UIImageView = {
         let iv = UIImageView()
@@ -80,30 +81,7 @@ class PokemonTableViewCell: UITableViewCell {
         pokemonImageView.image = nil
         
         guard let url = URL(string: "\(PokemonTableViewCell.imageBaseURL)/\(pokemonId).png") else { return }
-        currentImageURL = url
-
-        downloadImage(from: url, into: pokemonImageView)
+        
+        pokemonImageView.setImage(from: url)
     }
-    
-    func downloadImage(from url: URL, into imageView: UIImageView) {
-        if let cachedImage = ImageCacheManager.shared.image(for: url) {
-            imageView.image = cachedImage
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let self else { return }
-            guard let data, error == nil,
-                  let image = UIImage(data: data) else { return }
-
-            ImageCacheManager.shared.setImage(image, for: url)
-
-            DispatchQueue.main.async {
-                if self.currentImageURL == url {
-                    imageView.image = image
-                }
-            }
-        }.resume()
-    }
-
 }

@@ -1,5 +1,5 @@
 //
-//  PokemonListViewModel.swift
+//  PokemonDetailViewModel.swift
 //  ChallengueBCILMZ
 //
 //  Created by Luis Marca on 11/04/25.
@@ -10,38 +10,43 @@ import Combine
 import DependencyInjector
 import Domain
 
-final class PokemonListViewModel: ObservableObject {
+final class PokemonDetailViewModel: ObservableObject {
     
     
     // MARK: - Properties Injected
     
-    @Inject private var pokemonUseCase: GetPokemonsUseCaseProtocol
+    @Inject private var pokemonByIDUseCase: GetPokemonByIDUseCaseProtocol
     
     
     // MARK: - Properties
     
     private var cancellables = Set<AnyCancellable>()
     
-    @Published var pokemons: [Pokemon] = []
+    @Published var pokemon: Pokemon?
+    let pokemonId: Int
     
     
     // MARK: - Lifecycle
     
-    init() {
-        fetchPokemons()
+    init(pokemonId: Int) {
+        self.pokemonId = pokemonId
+    }
+    
+    func handleOnAppear() {
+        fetchPokemonByID()
     }
     
     
     // MARK: - Internal
     
-    func fetchPokemons() {
-        pokemonUseCase.execute()
+    func fetchPokemonByID() {
+        pokemonByIDUseCase.execute(by: pokemonId)
             .receive(on: RunLoop.main)
             .sink { completion in
                 print(completion)
-            } receiveValue: { [weak self] pokemons in
+            } receiveValue: { [weak self] pokemon in
                 guard let self = self else { return }
-                self.pokemons = pokemons
+                self.pokemon = pokemon
             }
             .store(in: &cancellables)
     }

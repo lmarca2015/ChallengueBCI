@@ -14,4 +14,8 @@ public extension String {
     var extractedPokemonID: String? {
         self.split(separator: "/").last(where: { !$0.isEmpty }).map { String($0) }
     }
+    
+    var toInt: Int? {
+        return Int(self)
+    }
 }

@@ -8,7 +8,8 @@
 import UIKit
 import Combine
 import Domain
-class ViewController: UIViewController {
+
+class ViewController: UIViewController, LoadingViewPresentable {
     
     private var pokemons: [Pokemon] = [] {
         didSet {
@@ -65,7 +66,13 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let list = isSearchActive ? filteredPokemons : pokemons
+        let pokemon = list[indexPath.row]
         
+        guard let url = pokemon.url, let pokemonID = url.extractedPokemonID?.toInt else { return }
+        
+        let controller = DetailViewController.build(pokemonId: pokemonID)
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 }
 
@@ -88,7 +95,7 @@ private extension ViewController {
         ])
     }
     
-    private func setupSearchController() {
+    func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Pokémon"
@@ -98,10 +105,13 @@ private extension ViewController {
     }
     
     func bindViewModel() {
+        showLoading()
          viewModel.$pokemons
              .receive(on: RunLoop.main)
              .sink { [weak self] response in
                  guard let self else  { return }
+                 hideLoading()
+
                  pokemons = response
              }
              .store(in: &cancellables)

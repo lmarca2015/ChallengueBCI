@@ -5,54 +5,23 @@
 //  Created by Luis Marca on 11/04/25.
 //
 
-import SwiftUI
+import UIKit
 
-public struct NavigationController: UIViewControllerRepresentable {
+final class NavigationController: UINavigationController {
     
-    public let rootController: UIViewController
-    
-    public init(rootController: UIViewController) {
-        self.rootController = rootController
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureNavigationBar()
     }
     
-    public func makeUIViewController(context: Context) -> UINavigationController {
-        UINavigationController(rootViewController: self.rootController)
-    }
-
-    public func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
-    }
-}
-
-@MainActor
-public protocol NavigationBarStyle {
-    func configure(_ viewController: UIViewController)
-}
-
-public struct NavigationBarSimpleShow: NavigationBarStyle {
-    
-    public init() {}
-
-    public func configure(_ viewController: UIViewController) {
-        viewController.navigationController?.isNavigationBarHidden = false
-        viewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        viewController.navigationController?.navigationBar.tintColor = .black
-    }
-}
-
-public struct NavigationBarFullShow: NavigationBarStyle {
-    
-    private let title: String
-
-    public init(title: String) {
-        self.title = title
-    }
-
-    public func configure(_ viewController: UIViewController) {
-        viewController.navigationController?.isNavigationBarHidden = false
-        viewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        viewController.navigationController?.navigationBar.tintColor = .black
-        viewController.navigationItem.title = self.title
-        let font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        viewController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: font]
+    private func configureNavigationBar() {
+        navigationBar.isTranslucent = false
+        navigationBar.barTintColor = .black
+        navigationBar.backgroundColor = .black
+        navigationBar.tintColor = .white
+        navigationBar.titleTextAttributes = [
+            .font: UIFont.systemFont(ofSize: 20, weight: .bold),
+            .foregroundColor: UIColor.white
+        ]
     }
 }

@@ -13,6 +13,7 @@ public struct Pokemon: Codable {
     public let url: String?
     public var imageURL: URL?
     public let weight: Int?
+    public let base_experience: Int?
     public let forms: [PokemonForm]?
     public let types: [PokemonTypeEntry]?
     public let stats: [PokemonStat]?
@@ -25,6 +26,7 @@ public struct Pokemon: Codable {
                 url: String? = nil,
                 imageURL: URL? = nil,
                 weight: Int? = nil,
+                base_experience: Int? = nil,
                 forms: [PokemonForm]? = [],
                 types: [PokemonTypeEntry]? = [],
                 stats: [PokemonStat]? = [],
@@ -32,6 +34,7 @@ public struct Pokemon: Codable {
         self.name = name
         self.url = url
         self.imageURL = imageURL
+        self.base_experience = base_experience
         self.weight = weight
         self.forms = forms
         self.types = types

@@ -19,8 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let _ = PokemonDependencies()
         
         let rootViewController = ViewController()
-        
-        NavigationBarFullShow(title: "Pokémon List").configure(rootViewController)
+        rootViewController.title = "Pokémon List"
         
         let navigationController = UINavigationController(rootViewController: rootViewController)
         
