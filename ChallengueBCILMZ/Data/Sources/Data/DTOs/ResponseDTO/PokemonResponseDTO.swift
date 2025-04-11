@@ -13,25 +13,19 @@ struct PokemonResponseDTO: Codable, DTOtoModel {
     
     // MARK: - Properties
     
-    var order: Int
-    var name: String
     var forms: [PokemonFormDTO]
     var types: [PokemonTypeEntryDTO]
     var stats: [PokemonStatDTO]
     var abilities: [PokemonAbilityEntryDTO]
-    
+    var weight: Int
     
     // MARK: - DTOtoModel
     
     var toModel: Pokemon {
-        let url = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(order).png")
-        
-        return Pokemon(name: "",
-                       order: order,
-                       imageURL: url,
-                       forms: forms.map({ $0.toModel }),
-                       types: types.map({ $0.toModel }),
-                       stats: stats.map({ $0.toModel }),
-                       abilities: abilities.map({ $0.toModel }))
+        Pokemon(weight: weight,
+                forms: forms.map({ $0.toModel }),
+                types: types.map({ $0.toModel }),
+                stats: stats.map({ $0.toModel }),
+                abilities: abilities.map({ $0.toModel }))
     }
 }

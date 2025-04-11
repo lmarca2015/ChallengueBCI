@@ -21,6 +21,18 @@ class ViewController: UIViewController {
             tableView.backgroundColor = .white
         }
     }
+    
+    private let searchController = UISearchController(searchResultsController: nil)
+
+    private var filteredPokemons: [Pokemon] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    private var isSearchActive: Bool {
+        !(searchController.searchBar.text?.isEmpty ?? true)
+    }
 
     private var viewModel = PokemonListViewModel()
     private var cancellables = Set<AnyCancellable>()
@@ -30,24 +42,30 @@ class ViewController: UIViewController {
 
         bindViewModel()
         setupTableView()
+        setupSearchController()
     }
-
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        pokemons.count
+        isSearchActive ? filteredPokemons.count : pokemons.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PokemonTableViewCell.identifier, for: indexPath) as? PokemonTableViewCell else {
             return UITableViewCell()
         }
+        let list = isSearchActive ? filteredPokemons : pokemons
+        let pokemon = list[indexPath.row]
         
-        let pokemon = pokemons[indexPath.row]
-        cell.configure(with: pokemon, index: indexPath.row)
+        cell.configure(with: pokemon)
+        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
     }
 }
 
@@ -70,7 +88,16 @@ private extension ViewController {
         ])
     }
     
-    private func bindViewModel() {
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Pokémon"
+        searchController.searchBar.delegate = self
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+    
+    func bindViewModel() {
          viewModel.$pokemons
              .receive(on: RunLoop.main)
              .sink { [weak self] response in
@@ -79,4 +106,32 @@ private extension ViewController {
              }
              .store(in: &cancellables)
      }
+}
+
+extension ViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty else {
+            filteredPokemons = []
+            tableView.reloadData()
+            return
+        }
+
+        filteredPokemons = pokemons.filter { pokemon in
+            if let name = pokemon.name?.lowercased() {
+                return name.contains(searchText)
+            }
+            return false
+        }
+        
+        tableView.reloadData()
+    }
+}
+
+extension ViewController: UISearchBarDelegate {
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        filteredPokemons.removeAll()
+        tableView.reloadData()
+    }
 }

@@ -7,11 +7,14 @@
 
 import UIKit
 import Domain
+import Core
 
 class PokemonTableViewCell: UITableViewCell {
     
     static let identifier = "PokemonTableViewCell"
     static let imageBaseURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
+    
+    private var currentImageURL: URL?
     
     private lazy var pokemonImageView: UIImageView = {
         let iv = UIImageView()
@@ -68,24 +71,39 @@ class PokemonTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with pokemon: Pokemon, index: Int) {
-        numberLabel.text = "#\(index + 1)"
-        nameLabel.text = pokemon.name.capitalized
+    func configure(with pokemon: Pokemon) {
+        guard let name = pokemon.name, let url = pokemon.url, let pokemonId = url.extractedPokemonID else { return }
         
-        let imageURLString = "\(PokemonTableViewCell.imageBaseURL)/\(index + 1).png"
-        if let url = URL(string: imageURLString) {
-            downloadImage(from: url, into: pokemonImageView)
-        }
+        numberLabel.text = "#\(pokemonId)"
+        nameLabel.text = name.capitalized
+        
+        pokemonImageView.image = nil
+        
+        guard let url = URL(string: "\(PokemonTableViewCell.imageBaseURL)/\(pokemonId).png") else { return }
+        currentImageURL = url
+
+        downloadImage(from: url, into: pokemonImageView)
     }
     
     func downloadImage(from url: URL, into imageView: UIImageView) {
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data, error == nil,
+        if let cachedImage = ImageCacheManager.shared.image(for: url) {
+            imageView.image = cachedImage
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let self else { return }
+            guard let data, error == nil,
                   let image = UIImage(data: data) else { return }
-            
+
+            ImageCacheManager.shared.setImage(image, for: url)
+
             DispatchQueue.main.async {
-                imageView.image = image
+                if self.currentImageURL == url {
+                    imageView.image = image
+                }
             }
         }.resume()
     }
+
 }
