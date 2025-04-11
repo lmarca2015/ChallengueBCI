@@ -6,6 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		34F7DB942DA9417F005316FE /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 34F7DB932DA9417F005316FE /* Core */; };
+		34F7DB972DA941D2005316FE /* Data in Frameworks */ = {isa = PBXBuildFile; productRef = 34F7DB962DA941D2005316FE /* Data */; };
+		34F7DB9A2DA941E0005316FE /* DependencyInjector in Frameworks */ = {isa = PBXBuildFile; productRef = 34F7DB992DA941E0005316FE /* DependencyInjector */; };
+		34F7DB9D2DA941EC005316FE /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 34F7DB9C2DA941EC005316FE /* Domain */; };
+		34F7DBB62DA9488D005316FE /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 34F7DBB52DA9488D005316FE /* Core */; };
+		34F7DBB92DA94898005316FE /* Data in Frameworks */ = {isa = PBXBuildFile; productRef = 34F7DBB82DA94898005316FE /* Data */; };
+		34F7DBBC2DA948A1005316FE /* DependencyInjector in Frameworks */ = {isa = PBXBuildFile; productRef = 34F7DBBB2DA948A1005316FE /* DependencyInjector */; };
+		34F7DBBF2DA948A9005316FE /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 34F7DBBE2DA948A9005316FE /* Domain */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		34F7DAF12DA89275005316FE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +76,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34F7DB972DA941D2005316FE /* Data in Frameworks */,
+				34F7DB942DA9417F005316FE /* Core in Frameworks */,
+				34F7DBB92DA94898005316FE /* Data in Frameworks */,
+				34F7DB9D2DA941EC005316FE /* Domain in Frameworks */,
+				34F7DBBC2DA948A1005316FE /* DependencyInjector in Frameworks */,
+				34F7DBB62DA9488D005316FE /* Core in Frameworks */,
+				34F7DBBF2DA948A9005316FE /* Domain in Frameworks */,
+				34F7DB9A2DA941E0005316FE /* DependencyInjector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +144,14 @@
 			);
 			name = ChallengueBCILMZ;
 			packageProductDependencies = (
+				34F7DB932DA9417F005316FE /* Core */,
+				34F7DB962DA941D2005316FE /* Data */,
+				34F7DB992DA941E0005316FE /* DependencyInjector */,
+				34F7DB9C2DA941EC005316FE /* Domain */,
+				34F7DBB52DA9488D005316FE /* Core */,
+				34F7DBB82DA94898005316FE /* Data */,
+				34F7DBBB2DA948A1005316FE /* DependencyInjector */,
+				34F7DBBE2DA948A9005316FE /* Domain */,
 			);
 			productName = ChallengueBCILMZ;
 			productReference = 34F7DADA2DA89274005316FE /* ChallengueBCILMZ.app */;
@@ -208,6 +235,12 @@
 			);
 			mainGroup = 34F7DAD12DA89274005316FE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				34F7DBB42DA9488D005316FE /* XCLocalSwiftPackageReference "Core" */,
+				34F7DBB72DA94897005316FE /* XCLocalSwiftPackageReference "Data" */,
+				34F7DBBA2DA948A1005316FE /* XCLocalSwiftPackageReference "DependencyInjector" */,
+				34F7DBBD2DA948A9005316FE /* XCLocalSwiftPackageReference "Domain" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 34F7DADB2DA89274005316FE /* Products */;
 			projectDirPath = "";
@@ -287,6 +320,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://pokeapi.co/api/v2";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KTB532W8LX;
@@ -295,8 +329,9 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -315,6 +350,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BASE_URL = "https://pokeapi.co/api/v2";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KTB532W8LX;
@@ -323,8 +359,9 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -569,6 +606,60 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		34F7DBB42DA9488D005316FE /* XCLocalSwiftPackageReference "Core" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Core;
+		};
+		34F7DBB72DA94897005316FE /* XCLocalSwiftPackageReference "Data" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Data;
+		};
+		34F7DBBA2DA948A1005316FE /* XCLocalSwiftPackageReference "DependencyInjector" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = DependencyInjector;
+		};
+		34F7DBBD2DA948A9005316FE /* XCLocalSwiftPackageReference "Domain" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Domain;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		34F7DB932DA9417F005316FE /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
+		34F7DB962DA941D2005316FE /* Data */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Data;
+		};
+		34F7DB992DA941E0005316FE /* DependencyInjector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DependencyInjector;
+		};
+		34F7DB9C2DA941EC005316FE /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
+		};
+		34F7DBB52DA9488D005316FE /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
+		34F7DBB82DA94898005316FE /* Data */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Data;
+		};
+		34F7DBBB2DA948A1005316FE /* DependencyInjector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DependencyInjector;
+		};
+		34F7DBBE2DA948A9005316FE /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 34F7DAD22DA89274005316FE /* Project object */;
 }
