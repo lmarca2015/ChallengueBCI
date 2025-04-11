@@ -13,13 +13,12 @@ struct RecipeFilteredResponseDTO: Codable, DTOtoModel {
     
     // MARK: - Properties
     
-    var id: Int
     var name: String
     
     
     // MARK: - DTOtoModel
     
     var toModel: Pokemon {
-        Pokemon(id: id, name: name)
+        Pokemon(name: name)
     }
 }

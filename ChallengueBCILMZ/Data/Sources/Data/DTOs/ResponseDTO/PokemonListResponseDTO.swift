@@ -15,7 +15,6 @@ struct PokemonListResponseDTO: Decodable, DTOtoModel {
     
     var results: [RecipeFilteredResponseDTO]
     var count: Int
-    var previous: Int
     var next: String
 
     

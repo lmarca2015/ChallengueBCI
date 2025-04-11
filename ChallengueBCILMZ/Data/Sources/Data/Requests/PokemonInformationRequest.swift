@@ -20,7 +20,7 @@ struct PokemonInformationRequest: GetRequest {
     var body: EmptyBodyDTO = EmptyBodyDTO()
     
     var path: String {
-        return "/recipes/\(id)/information"
+        return "/pokemon/\(id)"
     }
     
     

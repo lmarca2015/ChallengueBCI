@@ -19,7 +19,7 @@ struct PokemonsRequest: GetRequest {
     
     var body: EmptyBodyDTO = EmptyBodyDTO()
     
-    var path: String { "/pokemon/\(id)" }
+    var path: String { "/pokemon?limit=\(id)" }
     
     
     // MARK: - Lifecycle
