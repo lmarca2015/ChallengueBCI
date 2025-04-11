@@ -43,6 +43,13 @@ public struct Pokemon: Codable {
     }
 }
 
+public extension Pokemon {
+    var extractedID: Int? {
+        guard let url = forms?.first?.url else { return nil }
+        return Int(url.trimmingCharacters(in: CharacterSet(charactersIn: "/")).components(separatedBy: "/").last ?? "")
+    }
+}
+
 public struct PokemonTypeEntry: Codable {
     
     public let type: PokemonType
