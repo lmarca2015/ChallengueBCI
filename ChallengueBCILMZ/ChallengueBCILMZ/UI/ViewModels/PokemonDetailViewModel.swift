@@ -21,15 +21,19 @@ final class PokemonDetailViewModel: ObservableObject {
     // MARK: - Properties
     
     private var cancellables = Set<AnyCancellable>()
+    private let fallbackPokemon: Pokemon?
     
+    @Published var errorMessage: String? = nil
     @Published var pokemon: Pokemon?
+    
     let pokemonId: Int
     
     
     // MARK: - Lifecycle
     
-    init(pokemonId: Int) {
+    init(pokemonId: Int, fallbackPokemon: Pokemon? = nil) {
         self.pokemonId = pokemonId
+        self.fallbackPokemon = fallbackPokemon
     }
     
     func handleOnAppear() {
@@ -42,8 +46,15 @@ final class PokemonDetailViewModel: ObservableObject {
     func fetchPokemonByID() {
         pokemonByIDUseCase.execute(by: pokemonId)
             .receive(on: RunLoop.main)
-            .sink { completion in
-                print(completion)
+            .sink { [weak self] completion in
+                if case .failure(_) = completion {
+                    guard let self = self else { return }
+                    if let fallback = fallbackPokemon {
+                        pokemon = fallback
+                    } else {
+                        errorMessage = "Sin conexión y sin datos disponibles."
+                    }
+                }
             } receiveValue: { [weak self] pokemon in
                 guard let self = self else { return }
                 self.pokemon = pokemon

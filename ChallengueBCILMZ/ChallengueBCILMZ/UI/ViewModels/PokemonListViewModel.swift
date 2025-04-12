@@ -22,6 +22,7 @@ final class PokemonListViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
+    @Published var errorMessage: String? = nil
     @Published var pokemons: [Pokemon] = []
     
     
@@ -37,11 +38,15 @@ final class PokemonListViewModel: ObservableObject {
     func fetchPokemons() {
         pokemonUseCase.execute()
             .receive(on: RunLoop.main)
-            .sink { completion in
-                print(completion)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure( _):
+                    self?.errorMessage = "Sin conexión y sin datos disponibles."
+                case .finished:
+                    break
+                }
             } receiveValue: { [weak self] pokemons in
-                guard let self = self else { return }
-                self.pokemons = pokemons
+                self?.pokemons = pokemons
             }
             .store(in: &cancellables)
     }

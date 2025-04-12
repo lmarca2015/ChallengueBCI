@@ -68,13 +68,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let list = isSearchActive ? filteredPokemons : pokemons
         let pokemon = list[indexPath.row]
-        
+                
         guard let url = pokemon.url, let pokemonID = url.extractedPokemonID?.toInt else { return }
         
-        let controller = DetailViewController.build(pokemonId: pokemonID)
+        let controller = DetailViewController.build(pokemonId: pokemonID, fallbackPokemon: pokemon)
         self.navigationController?.pushViewController(controller, animated: true)
     }
 }
+
+
+// MARK: - Private methods
 
 private extension ViewController {
     
@@ -115,7 +118,21 @@ private extension ViewController {
                  pokemons = response
              }
              .store(in: &cancellables)
+        
+        viewModel.$errorMessage
+            .sink { [weak self] error in
+                guard let message = error, let self else { return }
+                hideLoading()
+                showErrorAlert(message)
+            }
+            .store(in: &cancellables)
      }
+    
+    func showErrorAlert(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 extension ViewController: UISearchResultsUpdating {

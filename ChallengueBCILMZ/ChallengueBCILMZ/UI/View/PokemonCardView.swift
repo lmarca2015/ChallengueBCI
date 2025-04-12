@@ -7,6 +7,7 @@
 
 import UIKit
 import Domain
+import Kingfisher
 
 final class PokemonCardView: UIView {
     
@@ -84,36 +85,47 @@ final class PokemonCardView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
     func configure(with pokemon: Pokemon) {
-        guard let forms = pokemon.forms,
-              let first = forms.first,
-              let pokemonId = first.url.extractedPokemonID  else { return }
-        
-        numberLabel.text = "#\(pokemonId)"
-        nameLabel.text = first.name.capitalized
-        
-        typeStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        if let types = pokemon.types {
-            for type in types {
-                let circle = UIView()
-                circle.translatesAutoresizingMaskIntoConstraints = false
-                circle.widthAnchor.constraint(equalToConstant: 20).isActive = true
-                circle.heightAnchor.constraint(equalToConstant: 20).isActive = true
-                circle.layer.cornerRadius = 10
-                circle.backgroundColor = color(for: type.type.name)
-                typeStackView.addArrangedSubview(circle)
+        if let forms = pokemon.forms, !forms.isEmpty {
+            guard let first = forms.first,
+                  let pokemonId = first.url.extractedPokemonID  else { return }
+            
+            numberLabel.text = "#\(pokemonId)"
+            nameLabel.text = first.name.capitalized
+            
+            typeStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+            
+            if let types = pokemon.types {
+                for type in types {
+                    let circle = UIView()
+                    circle.translatesAutoresizingMaskIntoConstraints = false
+                    circle.widthAnchor.constraint(equalToConstant: 20).isActive = true
+                    circle.heightAnchor.constraint(equalToConstant: 20).isActive = true
+                    circle.layer.cornerRadius = 10
+                    circle.backgroundColor = color(for: type.type.name)
+                    typeStackView.addArrangedSubview(circle)
+                }
+                
+                if let mainType = types.first?.type.name {
+                    backgroundCard.backgroundColor = backgroundColor(for: mainType)
+                }
             }
             
-            if let mainType = types.first?.type.name {
-                backgroundCard.backgroundColor = backgroundColor(for: mainType)
-            }
+            guard let url = URL(string: "\(PokemonTableViewCell.imageBaseURL)/\(pokemonId).png") else { return }
+            
+            pokemonImageView.kf.setImage(with: url)
+        } else {
+            guard let url = pokemon.url,
+                  let pokemonId = url.extractedPokemonID  else { return }
+            
+            numberLabel.text = "#\(pokemonId)"
+            nameLabel.text = pokemon.name?.capitalized
+            
+            guard let url = URL(string: "\(PokemonTableViewCell.imageBaseURL)/\(pokemonId).png") else { return }
+            
+            pokemonImageView.kf.setImage(with: url)
         }
-        
-        guard let url = URL(string: "\(PokemonTableViewCell.imageBaseURL)/\(pokemonId).png") else { return }
-        
-        pokemonImageView.setImage(from: url)
     }
 }
 

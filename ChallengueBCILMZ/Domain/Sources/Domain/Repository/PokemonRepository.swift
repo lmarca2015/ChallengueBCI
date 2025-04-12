@@ -16,6 +16,7 @@ public struct PokemonRepository: PokemonRepositoryProtocol {
     // MARK: - Properties
     
     @Inject private var remoteDS: PokemonRemoteDataSourceProtocol
+    private let localStorage = PokemonLocalStorage()
     
     
     // MARK: - Lifecycle
@@ -34,7 +35,13 @@ public struct PokemonRepository: PokemonRepositoryProtocol {
             Future<[Pokemon], Error> { promise in
                 Task {
                     do {
+                        if let localPokemons = localStorage.loadPokemonList(), !localPokemons.isEmpty {
+                            promise(.success(localPokemons))
+                            return
+                        }
+                        
                         let pokemons = try await remoteDS.fetchPokemons()
+                        localStorage.savePokemonList(pokemons)
                         promise(.success(pokemons))
                     } catch {
                         promise(.failure(error))
@@ -50,8 +57,14 @@ public struct PokemonRepository: PokemonRepositoryProtocol {
             Future { promise in
                 Task {
                     do {
-                        let recipe = try await remoteDS.getPokemon(by: id)
-                        promise(.success(recipe))
+                        if let cachedDetail = localStorage.loadPokemonDetail(id: id) {
+                            promise(.success(cachedDetail))
+                            return
+                        }
+                        
+                        let pokemon = try await remoteDS.getPokemon(by: id)
+                        localStorage.savePokemonDetail(pokemon)
+                        promise(.success(pokemon))
                     } catch {
                         // TODO: manage error
                         promise(.failure(error))

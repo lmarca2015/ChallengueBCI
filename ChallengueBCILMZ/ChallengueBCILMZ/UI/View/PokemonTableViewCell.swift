@@ -8,6 +8,7 @@
 import UIKit
 import Domain
 import Core
+import Kingfisher
 
 class PokemonTableViewCell: UITableViewCell {
     
@@ -17,7 +18,7 @@ class PokemonTableViewCell: UITableViewCell {
     
     // MARK: - Subviews
     
-    private lazy var pokemonImageView: UIImageView = {
+    public lazy var pokemonImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 24
@@ -82,6 +83,6 @@ class PokemonTableViewCell: UITableViewCell {
         
         guard let url = URL(string: "\(PokemonTableViewCell.imageBaseURL)/\(pokemonId).png") else { return }
         
-        pokemonImageView.setImage(from: url)
+        pokemonImageView.kf.setImage(with: url)
     }
 }

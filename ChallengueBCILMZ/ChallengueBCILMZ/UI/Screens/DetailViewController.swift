@@ -16,7 +16,8 @@ class DetailViewController: UIViewController, LoadingViewPresentable {
     private let cardView = PokemonCardView()
     
     private var pokemon: Pokemon?
-
+    private var fallbackPokemon: Pokemon?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -25,8 +26,9 @@ class DetailViewController: UIViewController, LoadingViewPresentable {
         viewModel.handleOnAppear()
     }
     
-    init(viewModel: PokemonDetailViewModel) {
+    init(viewModel: PokemonDetailViewModel, fallbackPokemon: Pokemon? = nil) {
         self.viewModel = viewModel
+        self.fallbackPokemon = fallbackPokemon
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,14 +37,17 @@ class DetailViewController: UIViewController, LoadingViewPresentable {
     }
 }
 
+
+// MARK: - Private methods
+
 private extension DetailViewController {
     
     func setupUI() {
         view.backgroundColor = .white
-
+        
         cardView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(cardView)
-
+        
         NSLayoutConstraint.activate([
             cardView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             cardView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -62,14 +67,27 @@ private extension DetailViewController {
                 cardView.configure(with: response)
             }
             .store(in: &cancellables)
+        
+        viewModel.$errorMessage
+            .sink { [weak self] error in
+                guard let message = error, let self else { return }
+                hideLoading()
+                showErrorAlert(message)
+            }
+            .store(in: &cancellables)
     }
     
+    func showErrorAlert(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 extension DetailViewController {
     
-    static func build(pokemonId: Int) -> DetailViewController {
-        let viewModel = PokemonDetailViewModel(pokemonId: pokemonId)
+    static func build(pokemonId: Int, fallbackPokemon: Pokemon? = nil) -> DetailViewController {
+        let viewModel = PokemonDetailViewModel(pokemonId: pokemonId, fallbackPokemon: fallbackPokemon)
         
         return DetailViewController(viewModel: viewModel)
     }
